@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/Styles/ride_share.css">
+    <title>Ride Share</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-car-side"></i> Ride Share</h1>
+            <button class="btn primary-btn" onclick="showRideModal()">
+                <i class="fas fa-plus"></i> Post a Ride
+            </button>
+        </header>
+        <div class="filter-panel">
+            <h2>Find Rides</h2>
+            <div class="filter-controls">
+                <div class="form-group">
+                    <label for="filterFrom">From:</label>
+                    <select id="filterFrom" class="form-control">
+                        <option value="">All Cities</option>
+                        <option value="IIITB">IIITB</option>
+                        <option value="Banglore Airport">Banglore Airport</option>
+                        <option value="Yeswantpur junction">Yeswantpur junction</option>
+                        <option value="SMVT Station">SMVT Station</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterTo">To:</label>
+                    <select id="filterTo" class="form-control">
+                        <option value="">All Cities</option>
+                        <option value="IIITB">IIITB</option>
+                        <option value="Banglore Airport">Banglore Airport</option>
+                        <option value="Yeswantpur junction">Yeswantpur junction</option>
+                        <option value="SMVT Station">SMVT Station</option>
+                    </select>
+                </div>
+                <button class="btn secondary-btn" onclick="applyFilter()">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </div>
+        </div>
+
+        <div class="rides-container">
+            <h2>Available Rides</h2>
+            <div id="no-rides-message" class="hidden">
+                <p>No matching rides found. Try adjusting your filters or post a new ride.</p>
+            </div>
+            <ul id="rideList" class="ride-list">
+                {% for ride in rides %}
+                <li class="ride-card" data-from="{{ ride.from }}" data-to="{{ ride.to }}" data-date="{{ ride.date }}"
+                    data-time="{{ ride.time }}" data-contact="{{ ride.contact }}">
+                    <div class="ride-info">
+                        <div class="route-info">
+                            <span class="from"><i class="fas fa-map-marker-alt"></i> {{ ride.from }}</span>
+                            <i class="fas fa-arrow-right route-arrow"></i>
+                            <span class="to"><i class="fas fa-map-marker-alt"></i> {{ ride.to }}</span>
+                        </div>
+                        <div class="time-info">
+                            <span><i class="far fa-calendar"></i> {{ ride.date }}</span>
+                            <span><i class="far fa-clock"></i> {{ ride.time }}</span>
+                        </div>
+                    </div>
+                    <div class="ride-actions">
+                        <button class="btn info-btn" onclick="showRideDetails(this.parentNode.parentNode)"><i
+                                class="fas fa-info-circle"></i> Details</button>
+                        {% if ride.user_id == user_id %}
+                        <a href="/delete_ride/{{ ride.id }}" class="btn delete-btn"><i class="fas fa-trash"></i>
+                            Delete</a>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <footer>
+            <a href="/main_page" class="back-link"><i class="fas fa-chevron-left"></i> Back to Main Page</a>
+        </footer>
+    </div>
+
+    <div id="createRideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Create Ride</h2>
+                <span class="close" onclick="hideRideModal()">&times;</span>
+            </div>
+            <form method="POST" action="/create_ride">
+                <div class="form-group">
+                    <label for="from">From:</label>
+                    <select id="from" name="from" class="form-control" required>
+                        <option value="IIITB">IIITB</option>
+                        <option value="Banglore Airport">Banglore Airport</option>
+                        <option value="Yeswantpur Junction">Yeswantpur Junction</option>
+                        <option value="SMVT Station">SMVT Station</option>
+                        <option value="KSR Bengaluru Station">KSR Bengaluru Station</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="to">To:</label>
+                    <select id="to" name="to" class="form-control" required>
+                        <option value="IIITB">IIITB</option>
+                        <option value="Banglore Airport">Banglore Airport</option>
+                        <option value="Yeswantpur Junction">Yeswantpur Junction</option>
+                        <option value="SMVT Station">SMVT Station</option>
+                        <option value="KSR Bengaluru Station">KSR Bengaluru Station</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group form-half">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="form-group form-half">
+                        <label for="time">Time:</label>
+                        <input type="time" id="time" name="time" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact Information:</label>
+                    <input type="text" id="contact" name="contact" class="form-control" placeholder="Phone or email"
+                        required>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn secondary-btn" onclick="hideRideModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Post Ride</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="rideInfoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-info-circle"></i> Ride Details</h2>
+                <span class="close" onclick="hideInfoModal()">&times;</span>
+            </div>
+            <div class="ride-details">
+                <div class="detail-group">
+                    <div class="detail-item">
+                        <h3>From:</h3>
+                        <p id="infoFrom"></p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>To:</h3>
+                        <p id="infoTo"></p>
+                    </div>
+                </div>
+                <div class="detail-group">
+                    <div class="detail-item">
+                        <h3>Date:</h3>
+                        <p id="infoDate"></p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Time:</h3>
+                        <p id="infoTime"></p>
+                    </div>
+                </div>
+                <div class="detail-item contact-info">
+                    <h3>Contact:</h3>
+                    <p id="infoContact"></p>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn primary-btn" onclick="hideInfoModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showRideModal() {
+            document.getElementById('createRideModal').style.display = 'block';
+            document.body.classList.add('modal-open');
+        }
+
+        function hideRideModal() {
+            document.getElementById('createRideModal').style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        function hideInfoModal() {
+            document.getElementById('rideInfoModal').style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
+        function showRideDetails(rideElement) {
+            document.getElementById('infoFrom').innerText = rideElement.dataset.from;
+            document.getElementById('infoTo').innerText = rideElement.dataset.to;
+            document.getElementById('infoDate').innerText = rideElement.dataset.date;
+            document.getElementById('infoTime').innerText = rideElement.dataset.time;
+            document.getElementById('infoContact').innerText = rideElement.dataset.contact;
+            document.getElementById('rideInfoModal').style.display = 'block';
+            document.body.classList.add('modal-open');
+        }
+
+        window.addEventListener('click', function (event) {
+            const createModal = document.getElementById('createRideModal');
+            const infoModal = document.getElementById('rideInfoModal');
+            if (event.target === createModal) hideRideModal();
+            if (event.target === infoModal) hideInfoModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const items = document.querySelectorAll('#rideList li');
+            items.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    if (e.target.closest('.ride-actions')) {
+                        return;
+                    }
+                    showRideDetails(this);
+                });
+            });
+
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.min = today;
+            }
+        });
+
+        function applyFilter() {
+            const fromVal = document.getElementById('filterFrom').value;
+            const toVal = document.getElementById('filterTo').value;
+            const items = document.querySelectorAll('#rideList li');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const matchesFrom = !fromVal || item.dataset.from === fromVal;
+                const matchesTo = !toVal || item.dataset.to === toVal;
+                const isVisible = matchesFrom && matchesTo;
+
+                item.style.display = isVisible ? '' : 'none';
+                if (isVisible) visibleCount++;
+            });
+
+            document.getElementById('no-rides-message').classList.toggle('hidden', visibleCount > 0);
+        }
+    </script>
+</body>
+
+</html>

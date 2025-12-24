@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/Styles/login.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <h1>Login</h1>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+        <input type="email" id="email" name="email" required placeholder="Email"><br>
+        <input type="password" id="password" name="password" required placeholder="Password"><br>
+        <button type="submit">Login</button>
+    </form>
+    <a href="/signup">Need an account? Signup</a>
+    <br>
+    <a href="/change_password">Change password</a>
+</body>
+
+</html>

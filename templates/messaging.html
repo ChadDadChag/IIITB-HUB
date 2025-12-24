@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Messaging</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="stylesheet" href="/static/Styles/messaging.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Messaging</h1>
+            <h2>Chat Room</h2>
+        </header>
+
+        <div class="chat-container">
+            <div id="messages">
+                {% for message in messages %}
+                <p><strong>{{ message.username }}:</strong> {{ message.content }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="message" placeholder="Type your message here..." autocomplete="off">
+                <button id="send">Send</button>
+            </div>
+        </div>
+
+        <a href="/main_page" class="back-link">← Back to Main Page</a>
+    </div>
+
+    <script>
+        let socket = io();
+        let room = "chat_room";
+        let user_id = "{{ user_id }}";
+        let username = "{{ username }}";
+
+        let messagesDiv = document.getElementById('messages');
+
+        function scrollToBottom() {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        socket.on("connect", () => {
+            socket.emit("join", { room });
+        });
+
+        socket.on("message", (data) => {
+            console.log(data);
+            let p = document.createElement("p");
+            let strong = document.createElement("strong");
+            let x = data.split(":");
+            username = x[0];
+            let content = x[1];
+            for (let i = 2; i < x.length; i++) {
+                content += ":" + x[i];
+            }
+            strong.textContent = `${username}: `;
+            p.appendChild(strong);
+            p.appendChild(document.createTextNode(content));
+            messagesDiv.appendChild(p);
+            scrollToBottom();
+        });
+
+        document.getElementById("send").addEventListener("click", sendMessage);
+        document.getElementById("message").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            let input = document.getElementById("message");
+            let content = input.value.trim();
+            if (content) {
+                socket.emit("message", {
+                    room,
+                    user_id,
+                    username,
+                    content
+                });
+                input.value = "";
+                input.focus();
+            }
+        }
+
+        scrollToBottom();
+    </script>
+</body>
+
+</html>

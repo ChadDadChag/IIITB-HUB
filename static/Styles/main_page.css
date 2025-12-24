@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #000000;
+  --secondary-color: #111111;
+  --accent-color: #00BFFF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #888888;
+  --success-color: #00BFFF;
+  --warning-color: #FFD700;
+  --error-color: #FF4655;
+  --border-radius: 12px;
+  --transition-speed: 0.25s;
+  --shadow-sm: 0 2px 8px rgba(0, 191, 255, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 191, 255, 0.15);
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #111111 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-header {
+  background: var(--gradient-primary);
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.branding {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.institute-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.logo-icon {
+  background: var(--accent-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.logo-text {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all var(--transition-speed) ease;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.logout {
+  color: var(--error-color);
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 2.5rem 2rem;
+}
+
+.dashboard-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+}
+
+.service-card {
+  background: var(--secondary-color);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-primary);
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  color: var(--text-primary);
+  background-color: var(--primary-color);
+  transition: all var(--transition-speed) ease;
+  text-align: center;
+}
+
+.service-item i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color);
+  transition: transform var(--transition-speed) ease;
+}
+
+.service-item span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.service-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.service-item:hover i {
+  transform: scale(1.15);
+}
+
+.institute-motto {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-item {
+    padding: 1.5rem;
+  }
+  .content-wrapper {
+    padding: 1.5rem;
+  }
+}

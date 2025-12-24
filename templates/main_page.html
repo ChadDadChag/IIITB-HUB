@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="IIIT Bangalore Hub - Connect with students, share rides, and more" />
+    <title>IIITB Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/Styles/main_page.css" />
+    <link rel="icon" href="/static/Images/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <div class="branding">
+                <h1 class="institute-logo" onclick="window.location.href='/'">
+                    <span class="logo-icon">IIITB</span>
+                    <span class="logo-text">Home</span>
+                </h1>
+                <p class="tagline">Integrated Campus Platform</p>
+            </div>
+            <nav class="main-nav">
+                <a href="/logout" class="nav-item logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-wrapper">
+        <div class="dashboard-grid">
+            <section class="service-card">
+                <h2 class="section-title"><i class="fas fa-users"></i> Community Services</h2>
+                <div class="service-grid">
+                    <a href="/posts" class="service-item">
+                        <i class="fas fa-twitter"></i>
+                        <span>Posts</span>
+                    </a>
+                    <a href="/messaging/{{ user_id }}" class="service-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>Messaging</span>
+                    </a>
+                    <a href="/profile" class="service-item">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="/club" class="service-item">
+                        <i class="fas fa-users-cog"></i>
+                        <span>Clubs</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="service-card">
+                <h2 class="section-title"><i class="fas fa-toolbox"></i> Campus Utilities</h2>
+                <div class="service-grid">
+                    <a href="/ride_share" class="service-item">
+                        <i class="fas fa-car-side"></i>
+                        <span>Ride Sharing</span>
+                    </a>
+                    <a href="/lost_and_found" class="service-item">
+                        <i class="fas fa-search"></i>
+                        <span>Lost and Found</span>
+                    </a>
+                    <a href="/menu" class="service-item">
+                        <i class="fas fa-utensils"></i>
+                        <span>Menu</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

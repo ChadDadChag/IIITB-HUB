@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Menu</title>
+    <link rel="stylesheet" href="/static/Styles/menu.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="tab-nav" role="tablist" aria-label="Select a day">
+            {% for day in days %}
+            <button class="tab-button" role="tab" aria-controls="{{ day|lower }}-menu" aria-selected="false"
+                data-day="{{ day|lower }}" tabindex="0">
+                {{ 'Th' if day == 'Thursday' else 'Sa' if day == 'Saturday' else 'Su' if day == 'Sunday' else day[0:3]
+                }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <div class="content-area">
+            {% for day in days %}
+            <div class="day-header" id="{{ day|lower }}-header">
+            </div>
+            <div class="menu-content" id="{{ day|lower }}-menu" role="tabpanel">
+                {% for meal, items in menu[day].items() %}
+                <div class="meal-section">
+                    <h3>{{ meal }}</h3>
+                    <ul>
+                        {% for item in items %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const dayHeaders = document.querySelectorAll('.day-header');
+        const menuContents = document.querySelectorAll('.menu-content');
+
+        function showDay(day) {
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+                button.setAttribute('aria-selected', 'false');
+            });
+            dayHeaders.forEach(header => header.classList.remove('active'));
+            menuContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.opacity = 0;
+            });
+
+            const activeButton = document.querySelector(`.tab-button[data-day="${day}"]`);
+            const activeHeader = document.getElementById(`${day}-header`);
+            const activeMenu = document.getElementById(`${day}-menu`);
+
+            if (activeButton && activeHeader && activeMenu) {
+                activeButton.classList.add('active');
+                activeButton.setAttribute('aria-selected', 'true');
+                activeHeader.classList.add('active');
+                activeMenu.classList.add('active');
+                setTimeout(() => activeMenu.style.opacity = 1, 50);
+            }
+
+            localStorage.setItem('activeDay', day);
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => showDay(button.dataset.day));
+            button.addEventListener('keypress', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    showDay(button.dataset.day);
+                }
+            });
+        });
+
+        window.addEventListener('load', () => {
+            const savedDay = localStorage.getItem('activeDay');
+            const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toLowerCase();
+            const dayToShow = savedDay || today;
+            showDay(dayToShow);
+        });
+    </script>
+</body>
+
+</html>

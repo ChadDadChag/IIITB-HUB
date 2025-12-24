@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lost and Found</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/Styles/lost_and_found.css">
+</head>
+
+<body>
+    <h1>Lost and Found</h1>
+    <div class="post-button-container">
+        <button onclick="showLostFoundModal()">Post an Item</button>
+    </div>
+
+    <div id="postLostFoundModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLostFoundModal()">×</span>
+            <h2>Post Lost and Found</h2>
+            <form method="POST" action="/create_lost_item" enctype="multipart/form-data">
+                <label for="item_photo">Photo:</label>
+                <input type="file" id="item_photo" name="item_photo" accept="image/png, image/jpeg" required><br>
+                <label for="place_found">Place Found:</label>
+                <input type="text" id="place_found" name="place_found" required><br>
+                <label for="collect">Place to Collect:</label>
+                <input type="text" id="collect" name="collect" required><br>
+                <label for="contact">Contact Information:</label>
+                <input type="text" id="contact" name="contact" required><br>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="items-container">
+        {% for item in items %}
+        <div class="item-card">
+            {% if item.get("image_url") %}
+            <img src="{{ url_for('static', filename=item.get('image_url')) }}" class="item-image" alt="Item image">
+            {% endif %}
+            <p><strong>Found at:</strong> {{ item.place_found }}</p>
+            <p><strong>Collect at:</strong> {{ item.collect }}</p>
+            <p><strong>Contact:</strong> {{ item.contact }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="/main_page">Back to Main Page</a>
+
+    <script>
+        function showLostFoundModal() {
+            document.getElementById('postLostFoundModal').style.display = 'block';
+        }
+        function hideLostFoundModal() {
+            document.getElementById('postLostFoundModal').style.display = 'none';
+        }
+        document.getElementById('postLostFoundModal').addEventListener('click', function (event) {
+            if (event.target === this) {
+                hideLostFoundModal();
+            }
+        });
+    </script>
+</body>
+
+</html>
