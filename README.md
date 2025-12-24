@@ -1,4 +1,4 @@
-# IIIT-Blare: One-Stop Platform for IIITB Students
+# IIIT HUB: Centralized Web Platform for IIITB Students
 
 A centralized web platform designed for IIIT Bangalore students to manage and access all campus-related resources and services in one place.
 
